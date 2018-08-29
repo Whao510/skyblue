@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="../css/base.css" />
+        <link rel="stylesheet" type="text/css" href="../css/wu-car.css" />
+        <link rel="stylesheet" type="text/css" href="../assets/font-awesome/css/font-awesome.css" />
+        <script src="../assets/jquery-3.3.1.js"></script>
+        <script src="../js/common.js"></script>
+       
+    </head>
+    <body>
+         <div id="top1">
+            <div class="container">
+               <p class="p1 fl">您好，欢迎来到飞虎乐购！&nbsp;<a href="dl.html">安全登录</a>&nbsp;还没加入我们？&nbsp;<a href="zc.html">免费注册</a></p>
+
+                <ul class="ul1 fr">
+                    <li class="iii">我的账号
+                    <ul class="li-ul">
+                        <li><a href="#">我的账号</a></li>
+                        <li><a class="i0" href="#">账户首页</a></li>
+                        <li><a class="i0" href="#">我的收藏</a></li>
+                        <li><a class="i0" href="#">我的订单</a></li>
+                    </ul>
+                    <i class="jtxx"></i>
+                    <span></span>
+                    </li>
+                    <li class="iiii">网站导航
+                        <ul class="li-ul-i">
+                        <li><a href="#">网站导航</a></li>
+                        <li><a class="i0" href="#">帮助中心</a></li>
+                        <li><a class="i0" href="#">联系客服</a></li>
+                        <li><a class="i0" href="#">常见问题</a></li>
+                    </ul>
+                    </li>
+                    <li>加入收藏</li>
+                    <span class="spo"></span>
+                    <li><i></i>400&nbsp;883&nbsp;6900</li>
+                </ul> 
+            </div>
+        </div>
+
+<!-- //////////////////////////////////////////////////////////////////// -->
+        <div class="header">
+            <div class="container">
+                <div class="car-h">
+                    <a class="fl" href="fhlg.html"><h1>飞虎乐购</h1></a>
+                    
+                    <ul class="car-tu fr">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <h5>我挑选的商品</h5>
+
+                       <div class="items-list">
+                            <div class="dv-inp fl">
+                                <input type="checkbox" name="" class="items-inp" />全选
+                            </div>
+                            <ul class="items-ul fl">
+                                <li>飞虎自营商品</li>
+                                <li>商品名称</li>
+                                <li>商品数量</li>
+                                <li>商品单价</li>
+                                <li>飞虎总价</li>
+                                <li>操作</li> 
+                            </ul>
+                        </div>
+
+                        <div class="wulist">
+
+                
+                        </div>
+
+                        <ul class="goods-ms">
+                            <li class="i-pp fl">不同商家商品无法合并订单购买，请分别结算。</li>
+                            <li class="l-total fr">总金额：￥<span class="tprice">0</span></li>
+                        </ul>
+
+                        <div class="goods-qk">
+                           <a href="javascript:;" class="btnClear fl"><i class="fa fa-cart-arrow-down"></i>清空购物车</a>
+                           
+                           <button class="btn-go fr"><a href="">去结算</a></button>
+
+
+                           <button class="btn-goOn fr"><a href="fhlg.html">继续购买</a></button>
+                        </div>
+
+                </div>
+             </div>
+      
+        
+
+
+    <script type="text/javascript">
+
+        jQuery(function($){
+            
+            var wulist = document.querySelector('.wulist');
+            
+            var btnClear = document.querySelector('.btnClear');
+
+            var tprice = document.querySelector('.tprice');
+
+            var goodslist = Cookie.get('goodslist');
+            if(goodslist.length<=0){
+                goodslist = [];
+            }else{
+                goodslist = JSON.parse(goodslist);
+            }
+            render();
+
+            btnClear.onclick = function(e){
+                Cookie.remove('goodslist');
+
+                goodslist = [];
+                e.preventDefault();
+            }
+
+            wulist.onclick = function(e){
+                e = e || window.event;
+                var target = e.target || e.srcElement;
+
+                if(target.className === 'del'){
+                    var currentLi = target.parentNode.parentNode;
+
+                    console.log(currentLi);
+
+                    var id = currentLi.getAttribute('data-id');
+
+                    for(var i=0;i<goodslist.length;i++){
+                        if(goodslist[i].id === id){
+                            goodslist.splice(1);
+                            break;
+                        }
+                    }
+
+                    Cookie.set('goodslist',JSON.stringify(goodslist));
+                    render();
+                }
+            }
+
+
+            function render(){
+                var ul = document.createElement('ul');
+
+                var total = 0;
+
+                ul.innerHTML = goodslist.map(function(goods){
+
+                    total += goods.price * goods.qty;
+                    return `
+                        <li data-id="${goods.id}">
+                            <p class="dv0-inp"><input type="checkbox" ></p>
+                            <p class="goods-img"><img src="${goods.imgurl}" alt=""></p>
+                            <p class="goods-name">${goods.name}</p>
+                            <p class="goods-count"><input type="text" value="1"><input value="+" readonly="readonly"></input><input value="-" readonly="readonly"></input></p>
+                            <p class="goods-price">${goods.price}</p>
+                            <p class="goods-total">${goods.price}</p>
+                            <p class="del-sc"><a class="del" href="javascript:;">删除</a>|<a class="sc" href="">收藏</a></p>
+                        </li>
+                    `
+                }).join('\n');
+                wulist.innerHTML = '';
+                wulist.appendChild(ul);
+
+                tprice.innerHTML = total.toFixed(2);
+            }
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </body>
+</html>
